@@ -16,25 +16,32 @@ class Foobar2000(FlowLauncher):
 
     def query(self, query):
         if query == "play":
+            song_info = self.get_current_song()
             self.send_command("/api/player/play")
-            return [{"Title": "Playing", "SubTitle": "Foobar2000 is now playing", "IcoPath": "Images/app.png"}]
+            return [{"Title": "Playing", "SubTitle": song_info + " is now playing", "IcoPath": "Images/app.png"}]
         elif query == "pause":
+            song_info = self.get_current_song()
             self.send_command("/api/player/pause")
-            return [{"Title": "Paused", "SubTitle": "Foobar2000 is paused", "IcoPath": "Images/app.png"}]
+            return [{"Title": "Paused", "SubTitle": song_info + " is paused", "IcoPath": "Images/app.png"}]
         elif query == "toggle":
+            song_info = self.get_current_song()
             self.send_command("/api/player/pause/toggle")
-            return [{"Title": "Paused", "SubTitle": "Toggled audio", "IcoPath": "Images/app.png"}]
+            return [{"Title": "Paused", "SubTitle": "Toggled audio for " + song_info, "IcoPath": "Images/app.png"}]
         elif query == "stop":
+            song_info = self.get_current_song()
             self.send_command("/api/player/stop")
-            return [{"Title": "Stopped", "SubTitle": "Foobar2000 is stopped", "IcoPath": "Images/app.png"}]
+            return [{"Title": "Stopped", "SubTitle": "Stopped playing " + song_info, "IcoPath": "Images/app.png"}]
         elif query == "next":
             self.send_command("/api/player/next")
             return [{"Title": "Next", "SubTitle": "Playing next item", "IcoPath": "Images/app.png"}]
         elif query == "previous":
             self.send_command("/api/player/previous")
             return [{"Title": "Previous", "SubTitle": "Playing previous item", "IcoPath": "Images/app.png"}]
+        elif query == "current":
+            song_info = self.get_current_song()
+            return [{"Title": "Current Song", "SubTitle": song_info, "IcoPath": "Images/app.png"}]
         else:
-            return [{"Title": "Unknown command", "SubTitle": "Use play, pause, toggle, stop, next, or previous", "IcoPath": "Images/app.png"}]
+            return [{"Title": "Unknown command", "SubTitle": "Use play, pause, toggle, stop, next, previous or current", "IcoPath": "Images/app.png"}]
 
     def send_command(self, endpoint):
         conn = http.client.HTTPConnection(self.base_url)
@@ -50,6 +57,27 @@ class Foobar2000(FlowLauncher):
         finally:
             conn.close()
 
+    def get_current_song(self):
+        conn = http.client.HTTPConnection(self.base_url)
+        try:
+            conn.request("GET", "/api/query?player=true&trcolumns=%25artist%25,%25title%25")
+            response = conn.getresponse()
+            if response.status == 200:
+                data = response.read()
+                player_state = json.loads(data)
+                if 'player' in player_state and 'activeItem' in player_state['player']:
+                    artist = player_state['player']['activeItem']['columns'][0]
+                    title = player_state['player']['activeItem']['columns'][1]
+                    return f"{artist} - {title}"
+                else:
+                    return "No song is currently playing"
+            else:
+                return f"Error query current song: {response.status} {response.reason}"
+        except Exception as e:
+            return f"Error querying current song: {e}"
+        finally:
+            conn.close()
+            
     def context_menu(self, data):
         return [
             {
