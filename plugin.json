@@ -1,0 +1,12 @@
+{
+    "ID": "b09f63d2-ec96-4e38-a55e-2c6e4dbdf887",
+    "ActionKeyword": "fb",
+    "Name": "Foobar2000 Integration",
+    "Description": "Foobar2000 Integration using beefweb",
+    "Author": "Oliver259",
+    "Version": "1.0.0",
+    "Language": "python",
+    "Website": "https://github.com/Flow-Launcher/Flow.Launcher.Plugin.HelloWorldPython",
+    "IcoPath": "Images\\foobar2000.png",
+    "ExecuteFileName": "run.py"
+}
