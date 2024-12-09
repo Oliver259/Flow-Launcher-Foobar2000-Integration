@@ -18,24 +18,30 @@ class Foobar2000(FlowLauncher):
 
     def query(self, query):
         if query == "play":
-            self.send_command("play")
+            self.send_command("/player/play")
             return [{"Title": "Playing", "SubTitle": "Foobar2000 is now playing", "IcoPath": "Images/app.png"}]
         elif query == "pause":
-            self.send_command("pause")
+            self.send_command("/player/pause")
             return [{"Title": "Paused", "SubTitle": "Foobar2000 is paused", "IcoPath": "Images/app.png"}]
         elif query == "stop":
-            self.send_command("stop")
+            self.send_command("/player/stop")
             return [{"Title": "Stopped", "SubTitle": "Foobar2000 is stopped", "IcoPath": "Images/app.png"}]
+        elif query == "next":
+            self.send_command("/player/next")
+            return [{"Title": "Next", "SubTitle": "Playing next item", "IcoPath": "Images/app.png"}]
+        elif query == "previous":
+            self.send_command("/player/previous")
+            return [{"Title": "Previous", "SubTitle": "Playing previous item", "IcoPath": "Images/app.png"}]
         else:
-            return [{"Title": "Unknown command", "SubTitle": "Use play, pause, or stop", "IcoPath": "Images/app.png"}]
+            return [{"Title": "Unknown command", "SubTitle": "Use play, pause, stop, next, or previous", "IcoPath": "Images/app.png"}]
 
-    def send_command(self, command):
+    def send_command(self, endpoint):
         conn = http.client.HTTPConnection(self.base_url)
         headers = {'Content-type': 'application/json'}
         try:
-            conn.request("POST", f"/api/player/{command}", headers=headers)
+            conn.request("POST", endpoint, headers=headers)
             response = conn.getresponse()
-            if response.status != 200:
+            if response.status != 204:
                 print(f"Error sending command to foobar2000: {response.status} {response.reason}")
         except Exception as e:
             print(f"Error sending command to foobar2000: {e}")
