@@ -35,15 +35,17 @@ class Foobar2000(FlowLauncher):
             return [{"Title": "Stopped", "SubTitle": "Stopped playing " + song_info, "IcoPath": artwork_url}]
         elif query == "next":
             self.send_command("/api/player/next")
-            return [{"Title": "Next", "SubTitle": "Playing next item", "IcoPath": artwork_url}]
+            return [{"Title": "Next", "SubTitle": "Playing next song", "IcoPath": artwork_url}]
         elif query == "previous":
             self.send_command("/api/player/previous")
-            return [{"Title": "Previous", "SubTitle": "Playing previous item", "IcoPath": artwork_url}]
+            return [{"Title": "Previous", "SubTitle": "Playing previous song", "IcoPath": artwork_url}]
+        elif query == "random":
+            self.send_command("/api/player/play/random")
+            return [{"Title": "Random", "SubTitle": "Playing random song", "IcoPath": artwork_url}]
         elif query == "current":
-            
             return [{"Title": "Current Song", "SubTitle": song_info, "IcoPath": artwork_url}]
         else:
-            return [{"Title": "Unknown command", "SubTitle": "Use play, pause, toggle, stop, next, previous or current", "IcoPath": "Images/app.png"}]
+            return [{"Title": "Unknown command", "SubTitle": "Use play, pause, toggle, stop, next, previous, random or current", "IcoPath": "Images/app.png"}]
 
     def send_command(self, endpoint):
         conn = http.client.HTTPConnection(self.base_url)
