@@ -18,19 +18,15 @@ class Foobar2000(FlowLauncher):
         song_info = self.get_current_song()
         artwork_url = self.get_current_artwork()
         if query == "play":
-            
             self.send_command("/api/player/play")
             return [{"Title": "Playing", "SubTitle": song_info + " is now playing", "IcoPath": artwork_url}]
         elif query == "pause":
-            
             self.send_command("/api/player/pause")
             return [{"Title": "Paused", "SubTitle": song_info + " is paused", "IcoPath": artwork_url}]
         elif query == "toggle":
-            
             self.send_command("/api/player/pause/toggle")
             return [{"Title": "Paused", "SubTitle": "Toggled audio for " + song_info, "IcoPath": artwork_url}]
         elif query == "stop":
-            
             self.send_command("/api/player/stop")
             return [{"Title": "Stopped", "SubTitle": "Stopped playing " + song_info, "IcoPath": artwork_url}]
         elif query == "next":
@@ -111,7 +107,7 @@ class Foobar2000(FlowLauncher):
                 "IcoPath": "Images/app.png",
                 "JsonRPCAction": {
                     "method": "open_url",
-                    "parameters": ["https://github.com/your-repo/foobar2000-plugin"]
+                    "parameters": ["https://github.com/Oliver259/Flow-Launcher-Foobar2000-Integration"]
                 }
             }
         ]
