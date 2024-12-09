@@ -21,6 +21,9 @@ class Foobar2000(FlowLauncher):
         elif query == "pause":
             self.send_command("/api/player/pause")
             return [{"Title": "Paused", "SubTitle": "Foobar2000 is paused", "IcoPath": "Images/app.png"}]
+        elif query == "toggle":
+            self.send_command("/api/player/pause/toggle")
+            return [{"Title": "Paused", "SubTitle": "Toggled audio", "IcoPath": "Images/app.png"}]
         elif query == "stop":
             self.send_command("/api/player/stop")
             return [{"Title": "Stopped", "SubTitle": "Foobar2000 is stopped", "IcoPath": "Images/app.png"}]
@@ -31,7 +34,7 @@ class Foobar2000(FlowLauncher):
             self.send_command("/api/player/previous")
             return [{"Title": "Previous", "SubTitle": "Playing previous item", "IcoPath": "Images/app.png"}]
         else:
-            return [{"Title": "Unknown command", "SubTitle": "Use play, pause, stop, next, or previous", "IcoPath": "Images/app.png"}]
+            return [{"Title": "Unknown command", "SubTitle": "Use play, pause, toggle, stop, next, or previous", "IcoPath": "Images/app.png"}]
 
     def send_command(self, endpoint):
         conn = http.client.HTTPConnection(self.base_url)
